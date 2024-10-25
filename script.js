@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 주관식 여부를 구분하는 리스트: O/X 형태면 false, 주관식이면 true
     const isShortAnswer = answers.map(answer => !(answer === 'O' || answer === 'X'));
 
-    let totalScore = 0; // 점수를 저장하는 변수
+    let totalScore = 0;
     const quizContainer = document.getElementById('quiz-container');
 
     // 각 질문과 답변을 동적으로 생성
@@ -198,13 +198,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         fetch(url, {
             method: 'POST',
+            mode: 'no-cors', // CORS 문제를 해결하기 위한 설정
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        }).then(response => {
+        })
+        .then(() => {
             console.log('결과가 성공적으로 제출되었습니다.');
-        }).catch(error => {
+        })
+        .catch(error => {
             console.error('오류 발생:', error);
         });
     }
@@ -215,10 +218,9 @@ document.addEventListener('DOMContentLoaded', function() {
         finalScoreElement.textContent = `총 점수: ${totalScore}점`;
 
         const userName = prompt("이름을 입력해주세요");
-        submitResults(userName, totalScore); // 이름과 점수를 Google Sheets로 제출
+        submitResults(userName, totalScore);
     }
 
-    // '결과 확인' 버튼이 클릭되면 showScore 함수가 실행되도록 설정
     const resultButton = document.createElement('button');
     resultButton.textContent = '결과 확인';
     resultButton.onclick = showScore;
